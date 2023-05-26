@@ -1,17 +1,27 @@
  <%= render "shared/navbar" %>
-
-<div class="card-category-show" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= cl_image_path @list.photo.key %>')"><%= @list.name %>
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('<%= cl_image_path @list.photo.key %>');">
+  <h1 class="text-center"> <%= @list.name %></h1>
 </div>
 
+<div class="container-bookmark">
+  <h3 class="mt-4">Your bookmarks :</h3>
+    <% @list.bookmarks.each do |bookmark| %>
+    <div class="card-product mt-3">
+    <img src="<%= bookmark.movie.poster_url %> " />
+    <div class="card-product-infos">
+      <h2><%= bookmark.movie.title %></h2>
+      <p><%= bookmark.comment %></p>
+      <br>
+      <p class=""><%= link_to '🗑️', bookmark_path(bookmark), data: { turbo_method: :delete }, class: "link" %></p>
+    </div>
+  </div>
+  <% end %>
 
-<ul>
-<% @list.bookmarks.each do |bookmark| %>
-<li><%= bookmark.comment %> - <%= bookmark.movie.title %> / <%= link_to "Remove", bookmark_path(bookmark), data: {turbo_method: :delete} %></li>
-<% end %>
-</ul>
-
-<%= simple_form_for [@list, @bookmark] do |f| %>
-  <%= f.input :comment %>
-  <%= f.association :movie %>
-  <%= f.button :submit %>
-<% end %>
+  <div class="mt-5">
+    <%= simple_form_for [@list, @bookmark] do |f| %>
+      <%= f.input :comment %>
+      <%= f.association :movie %>
+      <%= f.button :submit, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
